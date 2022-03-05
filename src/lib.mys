@@ -42,6 +42,14 @@ class BytesReader:
     def read_i64(self) -> i64:
         return i64(self.read_u64())
 
+    def read_bytes(self, count: i64) -> bytes:
+        data = b""
+
+        for _ in range(count):
+            data += self.read_u8()
+
+        return data
+
 @test
 def test_read_unsigned():
     reader = BytesReader(
@@ -59,3 +67,11 @@ def test_read_signed():
     assert reader.read_i16() == i16(0x3456)
     assert reader.read_i32() == i32(0x789abcde)
     assert reader.read_i64() == i64(0x0123456789abcdef)
+
+@test
+def test_read_bytes():
+    reader = BytesReader(b"\x12\x34\x56\x78\x9a\xbc\xde")
+    assert reader.read_bytes(2) == b"\x12\x34"
+    assert reader.read_bytes(3) == b"\x56\x78\x9a"
+    assert reader.read_bytes(0) == b""
+    assert reader.read_bytes(1) == b"\xbc"
