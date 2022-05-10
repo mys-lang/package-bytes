@@ -5,14 +5,14 @@ class BytesReader:
     _data: bytes
     _pos: i64
 
-    def __init__(self, data: bytes):
+    func __init__(self, data: bytes):
         self._data = data
         self._pos = 0
 
-    def available(self) -> bool:
+    func available(self) -> bool:
         return self._pos < i64(len(self._data))
 
-    def read_u8(self) -> u8:
+    func read_u8(self) -> u8:
         if not self.available():
             raise BytesReaderError()
 
@@ -21,28 +21,28 @@ class BytesReader:
 
         return value
 
-    def read_u16(self) -> u16:
+    func read_u16(self) -> u16:
         return (u16(self.read_u8()) << 8) | u16(self.read_u8())
 
-    def read_u32(self) -> u32:
+    func read_u32(self) -> u32:
         return (u32(self.read_u16()) << 16) | u32(self.read_u16())
 
-    def read_u64(self) -> u64:
+    func read_u64(self) -> u64:
         return (u64(self.read_u32()) << 32) | u64(self.read_u32())
 
-    def read_i8(self) -> i8:
+    func read_i8(self) -> i8:
         return i8(self.read_u8())
 
-    def read_i16(self) -> i16:
+    func read_i16(self) -> i16:
         return i16(self.read_u16())
 
-    def read_i32(self) -> i32:
+    func read_i32(self) -> i32:
         return i32(self.read_u32())
 
-    def read_i64(self) -> i64:
+    func read_i64(self) -> i64:
         return i64(self.read_u64())
 
-    def read_bytes(self, count: i64) -> bytes:
+    func read_bytes(self, count: i64) -> bytes:
         data = b""
 
         for _ in range(count):
@@ -51,7 +51,7 @@ class BytesReader:
         return data
 
 @test
-def test_read_unsigned():
+func test_read_unsigned():
     reader = BytesReader(
         b"\x12\x34\x56\x78\x9a\xbc\xde\x01\x23\x45\x67\x89\xab\xcd\xef")
     assert reader.read_u8() == u8(0x12)
@@ -60,7 +60,7 @@ def test_read_unsigned():
     assert reader.read_u64() == u64(0x0123456789abcdef)
 
 @test
-def test_read_signed():
+func test_read_signed():
     reader = BytesReader(
         b"\x12\x34\x56\x78\x9a\xbc\xde\x01\x23\x45\x67\x89\xab\xcd\xef")
     assert reader.read_i8() == i8(0x12)
@@ -69,7 +69,7 @@ def test_read_signed():
     assert reader.read_i64() == i64(0x0123456789abcdef)
 
 @test
-def test_read_bytes():
+func test_read_bytes():
     reader = BytesReader(b"\x12\x34\x56\x78\x9a\xbc\xde")
     assert reader.read_bytes(2) == b"\x12\x34"
     assert reader.read_bytes(3) == b"\x56\x78\x9a"
