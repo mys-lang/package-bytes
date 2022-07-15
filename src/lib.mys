@@ -10,7 +10,7 @@ class BytesReader:
         self._pos = 0
 
     func available(self) -> bool:
-        return self._pos < i64(len(self._data))
+        return self._pos < self._data.length()
 
     func read_u8(self) -> u8:
         if not self.available():
